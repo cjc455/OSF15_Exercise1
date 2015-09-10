@@ -10,12 +10,29 @@
 
 
 	//TODO FUNCTION COMMENT
+/*
+*	PURPOSE: parse the user input into words that can be easier analyzed by the code, rather than a single long string
+*	INPUT: A const c-string for the user input
+	A double pointer to a Commands_t that 
+*/
+
 bool parse_user_input (const char* input, Commands_t** cmd) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
-
-	char *string = strdup(input);
 	
+	if(!input){
+		printf("ERROR: function parse_user_input: input is null");
+		return false;
+	}
+	if(!cmd){
+		printf("ERROR: func parse_user_input: cmd is null");
+		return false;
+	}
+	char *string = strdup(input);
+	if(!string) {
+		printf("ERROR: func parse_user_input: string is null");
+		return false;
+	}
 	*cmd = calloc (1,sizeof(Commands_t));
 	(*cmd)->cmds = calloc(MAX_CMD_COUNT,sizeof(char*));
 
@@ -40,7 +57,11 @@ bool parse_user_input (const char* input, Commands_t** cmd) {
 void destroy_commands(Commands_t** cmd) {
 
 	//TODO ERROR CHECK INCOMING PARAMETERS
-	
+	if(!cmd){
+		printf("ERROR: funct destroy_commands: cmd is null");
+		return;
+	}	
+
 	for (int i = 0; i < (*cmd)->num_cmds; ++i) {
 		free((*cmd)->cmds[i]);
 	}

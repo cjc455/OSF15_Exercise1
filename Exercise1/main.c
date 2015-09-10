@@ -20,15 +20,27 @@ void destroy_remaining_heap_allocations(Matrix_t **mats, unsigned int num_mats);
 
 	//TODO FUNCTION COMMENT
 int main (int argc, char **argv) {
+	
+	//srand sets up the use of the rand() function to generate random numbers
 	srand(time(NULL));		
 	char *line = NULL;
 	Commands_t* cmd;
 
+	//create an array of 10 matrixies
 	Matrix_t *mats[10];
+
+	//this call of memset sets all of the bytes for the first 10 instances of mats to have the value 0
 	memset(&mats,0, sizeof(Matrix_t*) * 10); // IMPORTANT C FUNCTION TO LEARN
 
 	Matrix_t *temp = NULL;
+
+	//arguments for create_matrix
+	//pointer to new matrix. This matrix will be created in the function
+	//name of matrix
+	//width, height
 	create_matrix (&temp,"temp_mat", 5, 5); // TODO ERROR CHECK
+
+	//call this function in file matrix.c
 	add_matrix_to_array(mats,temp, 10); //TODO ERROR CHECK NEEDED
 	int mat_idx = find_matrix_given_name(mats,10,"temp_mat");
 
