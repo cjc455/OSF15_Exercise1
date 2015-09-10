@@ -54,6 +54,10 @@ bool parse_user_input (const char* input, Commands_t** cmd) {
 }
 
 	//TODO FUNCTION COMMENT
+
+	//PURPOSE: Free the memory that has already been allocated by an instance of Commands_t
+	//INPUT: the instance of Commands_t to be destroyed
+	//RETURN: void
 void destroy_commands(Commands_t** cmd) {
 
 	//TODO ERROR CHECK INCOMING PARAMETERS

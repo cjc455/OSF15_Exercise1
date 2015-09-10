@@ -44,6 +44,10 @@ bool create_matrix (Matrix_t** new_matrix, const char* name, const unsigned int 
 		printf("ERROR: func create_matrix: input name is null");
 		return false;
 	}
+	if(strlen(name) == 0){
+		printf("ERROR: func create_matrix: input name has length 0.");
+		return false;
+	}
 	if(rows == 0 || cols == 0) {
 		printf("ERROR: func create_matrix: input cols or rows is 0");
 		return false;
@@ -173,6 +177,10 @@ bool duplicate_matrix (Matrix_t* src, Matrix_t* dest) {
 		printf("ERROR: func duplicate_matrix: source or destination matrixies are invalid.");
 		return false;
 	}
+	if (!(src->data) || !(dest->data)) {
+		printf("ERROR: func duplicate_matrix: source or destination matrixies data are invalid.");
+		return false;
+	}
 	/*
 	 * copy over data
 	 */
@@ -206,6 +214,9 @@ bool bitwise_shift_matrix (Matrix_t* a, char direction, unsigned int shift) {
 	if(direction != 'l' && direction != 'L' && direction != 'r' && direction != 'R'){
 		printf("ERROR: func bitwise_shift_matrx: input direction is not L l R or r");
 		return false;
+	}
+	if(shift == 0){
+		printf("WARNING: function bitwise_shift_matrix: bits are being shifted by 0 bits.");
 	}
 
 	//first check direction
@@ -275,7 +286,7 @@ bool add_matrices (Matrix_t* a, Matrix_t* b, Matrix_t* c) {
 }
 
 	//TODO FUNCTION COMMENT
-/*	PURPOSE: convert matrix m into a printable string, then print it
+/*	PURPOSE: break down and print the contents of a matrix
 *	INPUT: Matrix to be displayed
 *	RETURN: void
 */
@@ -307,7 +318,23 @@ void display_matrix (Matrix_t* m) {
 bool read_matrix (const char* matrix_input_filename, Matrix_t** m) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
-
+	if(!matrix_input_filename) {
+		printf("ERROR: read_matrix: filename is null");
+		return false;
+	}
+	if(strlen(matrix_input_filename) == 0) {
+		printf("ERROR: read_matrix: filename has length 0.");
+		return false;
+	}
+	if(!m){
+		printf("ERROR: read_matrix: input matrix is null.");
+		return false;
+	}
+	if(!((*m)->data)) {
+		printf("ERROR: read_matrix: input matrix data is null");
+		return false;
+	}
+	
 
 	int fd = open(matrix_input_filename,O_RDONLY);
 	if (fd < 0) {
@@ -446,7 +473,19 @@ bool read_matrix (const char* matrix_input_filename, Matrix_t** m) {
 bool write_matrix (const char* matrix_output_filename, Matrix_t* m) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
+	if(!matrix_output_filename){
+		printf("ERROR: write_matrix: filename is null.");
+		return false;
+	}
+	if(strlen(matrix_output_filename) == 0) {
 
+		printf("ERROR: write_matrix: filename is empty.");
+		return false;
+	}
+	if(!m){
+		printf("ERROR: write_matrix: matrix m is null.");
+		return false;
+	}
 	int fd = open (matrix_output_filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	/* ERROR HANDLING USING errorno*/
 	if (fd < 0) {
@@ -511,9 +550,24 @@ bool write_matrix (const char* matrix_output_filename, Matrix_t* m) {
 }
 
 	//TODO FUNCTION COMMENT
+	/* PURPOSE: assign random values into a matrix that has already been created.
+	*INPUT: matrix to store the values, start range for random values,
+	*end range for random values.
+	*RETURN: true if there were no errors and the matrix values were correctly set.
+	*/
+	
 bool random_matrix(Matrix_t* m, unsigned int start_range, unsigned int end_range) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
+	if(!m){
+		printf("ERROR: random_matrix: input matrix is null.");
+		return false;	
+	}
+	if(end_range < start_range){
+		printf("ERROR: random_matrix: end_range is greater than start_range.");
+		return false;
+	}
+
 
 	for (unsigned int i = 0; i < m->rows; ++i) {
 		for (unsigned int j = 0; j < m->cols; ++j) {
@@ -526,6 +580,10 @@ bool random_matrix(Matrix_t* m, unsigned int start_range, unsigned int end_range
 /*Protected Functions in C*/
 
 	//TODO FUNCTION COMMENT
+	/*PURPOSE: loads a matrix data into an already allocated matrix.
+	*INPUT: the matrix to load the new data into, and the new data to give to the matrix
+	*RETURN: void, but the matrix is modified
+	*/
 void load_matrix (Matrix_t* m, unsigned int* data) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
@@ -547,21 +605,32 @@ void load_matrix (Matrix_t* m, unsigned int* data) {
 }
 
 	//TODO FUNCTION COMMENT
-unsigned int add_matrix_to_array (Matrix_t** mats, Matrix_t* new_matrix, unsigned int num_mats) {
+	/*PURPOSE: adds a allocated matrix to an array of matricies.
+	*INPUT: array of matrixies to add the matrix to
+	*the new matrix to be added to the array
+	*the number of matrixies already in the array
+	*RETURN: -1 if there is an error
+	*the position of the matrix in the array if the array was correctly added.
+	*/
+
+int add_matrix_to_array (Matrix_t** mats, Matrix_t* new_matrix, unsigned int num_mats) {
 	//this function adds the matrix new_matrix to the array mats	
 
 	//TODO ERROR CHECK INCOMING PARAMETERS
 	if(!mats){
 		printf("ERROR: function add_matrix_to_array: input matrix is null");
+		return -1;
 	}
 
 	if(!new_matrix){
 		printf("ERROR: function add_matrix_to_array: input new_matrix is null");
+		return -1;
 	}
 	if(num_mats == 0){
-		if(!mats){
+		
 		printf("ERROR: function add_matrix_to_array: input num_mats is 0");
-	}
+		return -1;
+	
 	}
 
 	//index of matrix
